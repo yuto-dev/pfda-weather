@@ -28,7 +28,9 @@ rainfallframe <- data.frame(Days = num, Rainfall = rainfall)
 sunframe <- data.frame(Days = num, Sunshine = sunshine)
 gustspdframe <- data.frame(Days = num, WindGustSpeed = gustspd)
 windspdframe <- data.frame(Morning = windspdm, Evening = windspde)
+windspdeframe <- data.frame(Days = num, WindSpeedEvening = windspde)
 humidityframe <- data.frame(Morning = humiditym, Evening = humiditye)
+humidityeframe <- data.frame(Days = num, HumidityEvening = humiditye)
 pressureframe <- data.frame(Morning = pressurem, Evening = pressuree)
 cloudframe <- data.frame(Morning = cloudm, Evening = cloude)
 
@@ -141,42 +143,22 @@ for(rainevavar in rainevaday)
 {
     for(sunvar in sunday)
     {
-        if(rainvar == sunvar)
+        if(rainevavar == sunvar)
         {
             rainevasunday[rainevasunindex] <- sunvar
             rainevasunindex <- rainevasunindex + 1
         }
     }
 }
-if(rainevasunday[1]==rainevasunday[2]){
-    #There is only one day that satisfies the analysis conditions
-    sprintf("The only day with zero rainfall and have both above average evaporation and sunshine is the %dth day", rainevasunday[1])
-    
-}else{
-    rainevasuncount <- 1
-    prevrainevasuncount <- 0
-    print("Below are the days with zero rainfall and both the sunshine and evaporation rate are above average:")
-    for(rainevasunvar in rainevasunday){
-        if(rainevasuncount > 1){
-            if(rainevasunday[rainevasuncount] == rainevasuncount[prevrainevasuncount]){
-                break()
-            }else {
-                print(rainevasunday[rainevasuncount])
-            }
-        }else{
-        print(rainevasunday[rainevasuncount])
-        }
-    prevrainevasuncount <- rainevasuncount
-    rainevasuncount <- rainevasuncount + 1
-    }
-}
+sprintf("Below are the days with zero rainfall, high evaporation rate, and high sunshine:")
+print(rainevasunday)
 
-#Question 2: When is the best time to jog in the evening?
+#Question 2: When is the best time to exercise in the evening?
 print("--------------------------------------------------")
-print("When is the best time to jog?")
+print("When is the best time to exercise in the evening?")
 print("--------------------------------------------------")
 
-#Analysis 2-1: Which days don not rain?
+#Analysis 2-1: Which days do not rain?
 #Goes through the rain database and gets a
 #vector of days that do not rain
 rainyday <- vector()
@@ -191,7 +173,6 @@ for(i in 1:366)
 sprintf("There are %d days that do not rain", rainydayindex)
 
 #Analysis 2-2: Which days do not have high humidty in the evening?
-humidityeframe <- data.frame(Days = num, HumidityEvening = humiditye)
 lowhume <- humidityeframe[1,2]
 for(i in 1:366)
 {
@@ -246,3 +227,48 @@ for(rainvar in rainyday)
 sprintf("There are %d days with both zero rainfall and low humidity", rainhumeindex)
 
 #Analysis 2-3: Which days have non-windy evenings?
+lowwindse <- windspdeframe[1,2]
+for(i in 1:366)
+{
+    if(windspdeframe[i,2] < lowwindse){
+        lowwindse <- windspdeframe[i,2]
+    }
+}
+sprintf("The lowest wind speed in the evening is %f", lowwindse)
+highwindse <- windspdeframe[1,2]
+for(i in 1:366)
+{
+    if(windspdeframe[i,2] > highwindse){
+        highwindse <- windspdeframe[i,2]
+    }
+}
+sprintf("The highest wind speed in the evening is %f", highwindse)
+windsemean <- mean(windspde)
+sprintf("The average wind speed in the evening is %f", windsemean)
+
+windseday <- vector()
+windseindex <- 1
+for(i in 1:366)
+{
+    if (windspdeframe[i,2] < 20) {
+        windseday[windseindex] <- i
+    windseindex <- windseindex + 1
+    }
+}
+sprintf("There are %d days with non-windy evenings", windseindex)
+
+rainhumewindseday <- vector()
+rainhumewindseindex <- 1
+for(rainhumevar in rainhumeday)
+{
+    for(windsevar in sunday)
+    {
+        if(rainhumevar == windsevar)
+        {
+            rainhumewindseday[rainhumewindseindex] <- windsevar
+            rainhumewindseindex <- rainhumewindseindex + 1
+        }
+    }
+}
+sprintf("Below are the days with no rain, comfortable levels of humidity in the evening, and non-windy evenings:")
+print(rainhumewindseday)
