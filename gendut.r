@@ -210,3 +210,39 @@ for(i in 1:366)
 sprintf("The highest humidity in the evening is %f", highhume)
 humemean <- mean(humiditye)
 sprintf("The average humidity in the evening is %f", humemean)
+
+humeday <- vector()
+humedayindex <- 1
+for(i in 1:366)
+{
+    if (humidityeframe[i,2] < 50 && humidityeframe[i,2] > 30) {
+        humeday[humedayindex] <- i
+    humedayindex <- humedayindex + 1
+    }
+}
+sprintf("There are %d days with comfortable humidity levels", humedayindex)
+
+#Goes through both the rainy day and evaporation day vector
+#to find days where they both rain and have above average evaporation.
+rainhumeday <- vector()
+rainhumeindex <- 1
+for(rainvar in rainyday)
+{
+    for(humevar in humeday)
+    {
+        if(rainvar == humevar)
+        {
+            rainhumeday[rainhumeindex] <- humevar
+            prevrainhume <- rainhumeindex
+            rainhumeindex <- rainhumeindex + 1
+            if(i > 1)
+            {
+                humevar == rainhumeday[prevrainhume]
+                break()
+            }
+        }
+    }
+}
+sprintf("There are %d days with both zero rainfall and low humidity", rainhumeindex)
+
+#Analysis 2-3: Which days have non-windy evenings?
