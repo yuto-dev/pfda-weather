@@ -11,6 +11,7 @@ rainfall <- weatherdata[,3]
 evaporation <- weatherdata[,4]
 sunshine <- weatherdata[,5]
 gustspd <- weatherdata[,7]
+winddirm <- weatherdata[,8]
 windspdm <- weatherdata[,10]
 windspde <- weatherdata[,11]
 humiditym <- weatherdata[,12]
@@ -27,6 +28,7 @@ evaporationframe = data.frame(Days = num, Evaporation = evaporation)
 rainfallframe <- data.frame(Days = num, Rainfall = rainfall)
 sunframe <- data.frame(Days = num, Sunshine = sunshine)
 gustspdframe <- data.frame(Days = num, WindGustSpeed = gustspd)
+winddirmframe <- data.frame(Days = num, WindDirMorning = winddirm)
 windspdframe <- data.frame(Morning = windspdm, Evening = windspde)
 windspdeframe <- data.frame(Days = num, WindSpeedEvening = windspde)
 humidityframe <- data.frame(Morning = humiditym, Evening = humiditye)
@@ -272,3 +274,57 @@ for(rainhumevar in rainhumeday)
 }
 sprintf("Below are the days with no rain, comfortable levels of humidity in the evening, and non-windy evenings:")
 print(rainhumewindseday)
+
+#Question 3
+#When is the best time to fly from the east to the west?
+print("--------------------------------------------------")
+print("When is the best time to dry your clothes?")
+print("--------------------------------------------------")
+
+winddirm[is.na(winddirm)] <- 0
+
+
+print(winddirm)
+grepl(winddirm[1], "SW", fixed=TRUE)
+
+
+i <- 1
+print(winddirm[i])
+for(i in 1:366)
+{
+    if (grepl(winddirm[i], "N", fixed=TRUE)) {
+        winddirm[i] <- 1
+    }else if (grepl(winddirm[i], "E", fixed=TRUE)) {
+        winddirm[i] <- 5
+    }else if (grepl(winddirm[i], "S", fixed=TRUE)) {
+        winddirm[i] <- 9
+    }else if (grepl(winddirm[i], "W", fixed=TRUE)) {
+        winddirm[i] <- 13
+    }else if (grepl(winddirm[i], "NE", fixed=TRUE)) {
+        winddirm[i] <- 3
+    }else if (grepl(winddirm[i], "SE", fixed=TRUE)) {
+        winddirm[i] <- 7
+    }else if (grepl(winddirm[i], "SW", fixed=TRUE)) {
+        winddirm[i] <- 11
+    }else if (grepl(winddirm[i], "NW", fixed=TRUE)) {
+        winddirm[i] <- 15
+    }else if (grepl(winddirm[i], "NNE", fixed=TRUE)) {
+        winddirm[i] <- 2
+    }else if (grepl(winddirm[i], "NNW", fixed=TRUE)) {
+        winddirm[i] <- 16
+    }else if (grepl(winddirm[i], "SSE", fixed=TRUE)) {
+        winddirm[i] <- 8
+    }else if (grepl(winddirm[i], "SSW", fixed=TRUE)) {
+        winddirm[i] <- 10
+    }else if (grepl(winddirm[i], "ENE", fixed=TRUE)) {
+        winddirm[i] <- 4
+    }else if (grepl(winddirm[i], "ESE", fixed=TRUE)) {
+        winddirm[i] <- 6
+    }else if (grepl(winddirm[i], "WNW", fixed=TRUE)) {
+        winddirm[i] <- 14
+    }else if (grepl(winddirm[i], "WSW", fixed=TRUE)) {
+        winddirm[i] <- 12
+    }
+}
+
+print(winddirm)
