@@ -227,7 +227,6 @@ for(rainvar in rainyday)
         }
     }
 }
-sprintf("There are %d days with both zero rainfall and low humidity", rainhumeindex)
 
 #Analysis 2-3: Which days have non-windy evenings?
 lowwindse <- windspdeframe[1,2]
@@ -374,3 +373,32 @@ for(winddirmvar in winddirmday)
     }
 }
 sprintf("There are %d days with both west-bound winds and low amount of cloud in the morning", winddirmcloudmindex)
+
+#Analysis 3-3: Which days do not rain heavily?
+
+rainyday <- vector()
+rainydayindex <- 1
+for(i in 1:366)
+{
+    if (rainfallframe[i,2] < 10) {
+        rainyday[rainydayindex] <- i
+        rainydayindex <- rainydayindex + 1
+    }
+}
+sprintf("There are %d days with less than 10 rainfall", rainydayindex)
+
+winddirmcloudmrainday <- vector()
+winddirmcloudmrainindex <- 1
+for(winddirmcloudmvar in winddirmcloudmday)
+{
+    for(raintwovar in rainyday)
+    {
+        if(winddirmcloudmvar == raintwovar)
+        {
+            winddirmcloudmrainday[winddirmcloudmrainindex] <- raintwovar
+            winddirmcloudmrainindex <- winddirmcloudmrainindex + 1
+        }
+    }
+}
+sprintf("Below are the days suitable for journeys to the west:")
+print(winddirmcloudmrainday)
