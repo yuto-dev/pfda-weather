@@ -35,6 +35,7 @@ humidityframe <- data.frame(Morning = humiditym, Evening = humiditye)
 humidityeframe <- data.frame(Days = num, HumidityEvening = humiditye)
 pressureframe <- data.frame(Morning = pressurem, Evening = pressuree)
 cloudframe <- data.frame(Morning = cloudm, Evening = cloude)
+cloudmframe <- data.frame(Days = num, CloudMorning = cloudm)
 
 tempmedian <- rowMeans(tempframe)
 windspdmedian <- rowMeans(windspdframe)
@@ -60,9 +61,9 @@ ggplot(data = cloudmedframe, mapping = aes(x = Days, y = CloudMedian)) + geom_li
 
 #Question 1
 #When is the best time to dry your clothes?
-print("--------------------------------------------------")
+print("------------------------------------------")
 print("When is the best time to dry your clothes?")
-print("--------------------------------------------------")
+print("------------------------------------------")
 #Analysis 1-1: Which days have zero rainfall?
 #Goes through the rain database and gets a
 #vector of days that with zero rainfall
@@ -156,9 +157,9 @@ sprintf("Below are the days with zero rainfall, high evaporation rate, and high 
 print(rainevasunday)
 
 #Question 2: When is the best time to exercise in the evening?
-print("--------------------------------------------------")
+print("-------------------------------------------------")
 print("When is the best time to exercise in the evening?")
-print("--------------------------------------------------")
+print("-------------------------------------------------")
 
 #Analysis 2-1: Which days do not rain?
 #Goes through the rain database and gets a
@@ -277,19 +278,12 @@ print(rainhumewindseday)
 
 #Question 3
 #When is the best time to fly from the east to the west?
-print("--------------------------------------------------")
-print("When is the best time to dry your clothes?")
-print("--------------------------------------------------")
+#Analysis 3-1: Which days have winds travelling to the west?
+print("-------------------------------------------------------")
+print("When is the best time to fly from the east to the west?")
+print("-------------------------------------------------------")
 
 winddirm[is.na(winddirm)] <- 0
-
-
-print(winddirm)
-grepl(winddirm[1], "SW", fixed=TRUE)
-
-
-i <- 1
-print(winddirm[i])
 for(i in 1:366)
 {
     if (grepl(winddirm[i], "N", fixed=TRUE)) {
@@ -326,5 +320,57 @@ for(i in 1:366)
         winddirm[i] <- 12
     }
 }
+winddirm <- strtoi(winddirm)
+winddirmframe <- data.frame(Days = num, WindDirMorning = winddirm)
 
-print(winddirm)
+winddirmday <- vector()
+winddirmdayindex <- 1
+for(i in 1:366)
+{
+    if (winddirmframe[i,2] > 9) {
+        winddirmday[winddirmdayindex] <- i
+        winddirmdayindex <- winddirmdayindex + 1
+    }
+}
+sprintf("There are %d days where the winds travel to the west in the morning", winddirmdayindex)
+
+#Analysis 3-2: Which days do not have cloudy mornings?
+cloudmmean <- mean(cloudm)
+sprintf("The average cloudiness in the morning is %f", cloudmmean)
+cloudmmeanr <- 4
+
+#Goes through the evaporation database and gets a
+#vector of days that have above average evaporation.
+cloudmday <- vector()
+cloudmdayindex <- 1
+for(i in 1:366)
+{
+    if (cloudmframe[i,2] > cloudmmeanr) {
+        cloudmday[cloudmdayindex] <- i
+        cloudmdayindex <- cloudmdayindex + 1
+    }
+}
+sprintf("There are %d days with below average cloudiness (%d)", cloudmdayindex, cloudmmeanr)
+
+#Goes through both the rainy day and evaporation day vector
+#to find days where they both rain and have above average evaporation.
+winddirmcloudmday <- vector()
+winddirmcloudmindex <- 1
+for(winddirmvar in winddirmday)
+{
+    for(cloudmvar in cloudmday)
+    {
+        if(winddirmvar == cloudmvar)
+        {
+            winddirmcloudmday[winddirmcloudmindex] <- cloudmvar
+            prevwinddirmcloudm <- winddirmcloudmindex
+            winddirmcloudmindex <- winddirmcloudmindex + 1
+            if(i > 1)
+            {
+                cloudmvar == winddirmcloudmday[prevwinddirmcloudm]
+                break()
+            }
+        }
+    }
+}
+sprintf("There are %d days with both west-bound winds and low amount of cloud in the morning", winddirmcloudmindex)
