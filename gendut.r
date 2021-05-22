@@ -49,15 +49,7 @@ humiditymedframe <- data.frame(Days = num, HumidityMedian = humiditymedian)
 pressuremedframe <- data.frame(Days = num, PressureMedian = pressuremedian)
 cloudmedframe <- data.frame(Days = num, CloudMedian = cloudmedian)
 
-ggplot(data = tempmedframe, mapping = aes(x = Days, y = Temperature_Median)) + geom_line(colour = "red")
-ggplot(data = evaporationframe, mapping = aes(x = Days, y = Evaporation)) + geom_line(colour = "red")
-ggplot(data = rainfallframe, mapping = aes(x = Days, y = Rainfall)) + geom_line(colour = "blue")
-ggplot(data = sunframe, mapping = aes(x = Days, y = Sunshine)) + geom_line(colour = "#000000")
-ggplot(data = gustspdframe, mapping = aes(x = Days, y = WindGustSpeed)) + geom_line(colour = "green")
-ggplot(data = windspdmedframe, mapping = aes(x = Days, y = WindSpeedMedian)) + geom_line(colour = "green")
-ggplot(data = humiditymedframe, mapping = aes(x = Days, y = HumidityMedian)) + geom_line(colour = "blue")
-ggplot(data = pressuremedframe, mapping = aes(x = Days, y = PressureMedian)) + geom_line(colour = "blue")
-ggplot(data = cloudmedframe, mapping = aes(x = Days, y = CloudMedian)) + geom_line(colour = "blue")
+
 
 #Question 1
 #When is the best time to dry your clothes?
@@ -402,3 +394,40 @@ for(winddirmcloudmvar in winddirmcloudmday)
 }
 sprintf("Below are the days suitable for journeys to the west:")
 print(winddirmcloudmrainday)
+
+#Question 4: When is the best time to ski?
+#Analysis 4-1: When is winter?
+ggplot(data = tempmedframe, mapping = aes(x = Days, y = Temperature_Median)) + geom_line(colour = "red")
+winterday = 124:214
+
+#Analysis 4-2: When is it not cloudy?
+
+#Analysis 4-3: When will there be a lack of gust?
+
+#Question 5: When will a storm occur?
+#Analysis 5-1: When will the air pressure drops?
+
+#Analysis 5-2: When will there be heavy rain?
+
+#Analysis 5-3: When will there be strong gusts of wind?
+
+#Analysis 5-4: When will the constant wind speed be high?
+
+
+
+
+
+
+
+
+
+
+
+ggplot(data = evaporationframe, mapping = aes(x = Days, y = Evaporation)) + geom_line(colour = "red")
+ggplot(data = rainfallframe, mapping = aes(x = Days, y = Rainfall)) + geom_line(colour = "blue")
+ggplot(data = sunframe, mapping = aes(x = Days, y = Sunshine)) + geom_line(colour = "#000000")
+ggplot(data = gustspdframe, mapping = aes(x = Days, y = WindGustSpeed)) + geom_line(colour = "green")
+ggplot(data = windspdmedframe, mapping = aes(x = Days, y = WindSpeedMedian)) + geom_line(colour = "green")
+ggplot(data = humiditymedframe, mapping = aes(x = Days, y = HumidityMedian)) + geom_line(colour = "blue")
+ggplot(data = pressuremedframe, mapping = aes(x = Days, y = PressureMedian)) + geom_line(colour = "blue")
+ggplot(data = cloudmedframe, mapping = aes(x = Days, y = CloudMedian)) + geom_line(colour = "blue")
