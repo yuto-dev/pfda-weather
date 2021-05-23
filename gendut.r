@@ -22,6 +22,7 @@ cloudm <- weatherdata[,16]
 cloude <- weatherdata[,17]
 
 sunshine[is.na(sunshine)] <- 0
+windspdm[is.na(windspdm)] <- 0
 
 tempframe = data.frame(Min = mintemp, Max = maxtemp)
 evaporationframe = data.frame(Days = num, Evaporation = evaporation)
@@ -30,6 +31,7 @@ sunframe <- data.frame(Days = num, Sunshine = sunshine)
 gustspdframe <- data.frame(Days = num, WindGustSpeed = gustspd)
 winddirmframe <- data.frame(Days = num, WindDirMorning = winddirm)
 windspdframe <- data.frame(Morning = windspdm, Evening = windspde)
+windspdmframe <- data.frame(Days = num, WindSpeedMorning = windspdm)
 windspdeframe <- data.frame(Days = num, WindSpeedEvening = windspde)
 humidityframe <- data.frame(Morning = humiditym, Evening = humiditye)
 humidityeframe <- data.frame(Days = num, HumidityEvening = humiditye)
@@ -400,7 +402,23 @@ print(winddirmcloudmrainday)
 ggplot(data = tempmedframe, mapping = aes(x = Days, y = Temperature_Median)) + geom_line(colour = "red")
 winterday = 124:214
 
-#Analysis 4-2: When is it not cloudy?
+#Analysis 4-2: When will the constant wind speed be low?
+windspdmmean <- mean(windspdm)
+sprintf("The average wind speed in the morning is %f", windspdmmean)
+windspdmmeanr <- as.integer(windspdmmean)
+
+windsmday <- vector()
+windsmindex <- 1
+for(i in 1:366)
+{
+    if (windspdmframe[i,2] < 9) {
+        windsmday[windsmindex] <- i
+    windsmindex <- windsmindex + 1
+    }
+}
+sprintf("There are %d days with non-windy evenings", windseindex)
+
+
 
 #Analysis 4-3: When will there be a lack of gust?
 
@@ -410,8 +428,6 @@ winterday = 124:214
 #Analysis 5-2: When will there be heavy rain?
 
 #Analysis 5-3: When will there be strong gusts of wind?
-
-#Analysis 5-4: When will the constant wind speed be high?
 
 
 
