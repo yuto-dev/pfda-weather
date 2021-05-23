@@ -23,6 +23,7 @@ cloude <- weatherdata[,17]
 
 sunshine[is.na(sunshine)] <- 0
 windspdm[is.na(windspdm)] <- 0
+gustspd[is.na(gustspd)] <- 0
 
 tempframe = data.frame(Min = mintemp, Max = maxtemp)
 evaporationframe = data.frame(Days = num, Evaporation = evaporation)
@@ -42,13 +43,13 @@ cloudmframe <- data.frame(Days = num, CloudMorning = cloudm)
 tempmedian <- rowMeans(tempframe)
 windspdmedian <- rowMeans(windspdframe)
 humiditymedian <- rowMeans(humidityframe)
-pressuremedian <- rowMeans(pressureframe)
+pressuremed <- rowMeans(pressureframe)
 cloudmedian <- rowMeans(cloudframe)
 
 tempmedframe <- data.frame(Days = num, Temperature_Median = tempmedian)
 windspdmedframe <- data.frame(Days = num, WindSpeedMedian = windspdmedian)
 humiditymedframe <- data.frame(Days = num, HumidityMedian = humiditymedian)
-pressuremedframe <- data.frame(Days = num, PressureMedian = pressuremedian)
+pressuremedframe <- data.frame(Days = num, PressureMedian = pressuremed)
 cloudmedframe <- data.frame(Days = num, CloudMedian = cloudmedian)
 
 
@@ -116,7 +117,7 @@ for(rainvar in rainyday)
 #Analysis 1-3: Which days have above average sunshine?
 #The average sunshine throughout the year is 7.8, to simplify
 #things, we have rounded it up to 8.
-sunmean <- mean(sunshine)
+sunmean <- mean(sunshine, na.rm=TRUE)
 sprintf("The average sunshine is %f", sunmean)
 sunmeanr <- 8
 #Goes through the sunshine database and gets a
@@ -186,7 +187,7 @@ for(i in 1:366)
     }
 }
 sprintf("The highest humidity in the evening is %f", highhume)
-humemean <- mean(humiditye)
+humemean <- mean(humiditye, na.rm = TRUE)
 sprintf("The average humidity in the evening is %f", humemean)
 
 humeday <- vector()
@@ -239,7 +240,7 @@ for(i in 1:366)
     }
 }
 sprintf("The highest wind speed in the evening is %f", highwindse)
-windsemean <- mean(windspde)
+windsemean <- mean(windspde, na.rm = TRUE)
 sprintf("The average wind speed in the evening is %f", windsemean)
 
 windseday <- vector()
@@ -269,12 +270,12 @@ for(rainhumevar in rainhumeday)
 sprintf("Below are the days with no rain, comfortable levels of humidity in the evening, and non-windy evenings:")
 print(rainhumewindseday)
 
-#Question 3
-#When is the best time to fly from the east to the west?
-#Analysis 3-1: Which days have winds travelling to the west?
+#Question 3: When is the best time to fly from the east to the west?
 print("-------------------------------------------------------")
 print("When is the best time to fly from the east to the west?")
 print("-------------------------------------------------------")
+#Analysis 3-1: Which days have winds travelling to the west?
+
 
 winddirm[is.na(winddirm)] <- 0
 for(i in 1:366)
@@ -328,7 +329,7 @@ for(i in 1:366)
 sprintf("There are %d days where the winds travel to the west in the morning", winddirmdayindex)
 
 #Analysis 3-2: Which days do not have cloudy mornings?
-cloudmmean <- mean(cloudm)
+cloudmmean <- mean(cloudm, na.rm = TRUE)
 sprintf("The average cloudiness in the morning is %f", cloudmmean)
 cloudmmeanr <- 4
 
@@ -398,12 +399,16 @@ sprintf("Below are the days suitable for journeys to the west:")
 print(winddirmcloudmrainday)
 
 #Question 4: When is the best time to ski?
+print("-----------------------------")
+print("When is the best time to ski?")
+print("-----------------------------")
+
 #Analysis 4-1: When is winter?
 ggplot(data = tempmedframe, mapping = aes(x = Days, y = Temperature_Median)) + geom_line(colour = "red")
-winterday = 124:214
+winterday <- 124:214
 
 #Analysis 4-2: When will the constant wind speed be low?
-windspdmmean <- mean(windspdm)
+windspdmmean <- mean(windspdm, na.rm = TRUE)
 sprintf("The average wind speed in the morning is %f", windspdmmean)
 windspdmmeanr <- as.integer(windspdmmean)
 
@@ -416,29 +421,157 @@ for(i in 1:366)
     windsmindex <- windsmindex + 1
     }
 }
-sprintf("There are %d days with non-windy evenings", windseindex)
+sprintf("There are %d days with non-windy evenings", windsmindex)
 
-
+winterwindsmday <- vector()
+winterwindsmindex <- 1
+for(wintervar in winterday)
+{
+    for(windsmvar in windsmday)
+    {
+        if(wintervar == windsmvar)
+        {
+            winterwindsmday[winterwindsmindex] <- windsmvar
+            prevwinterwinds <- winterwindsmindex
+            winterwindsmindex <- winterwindsmindex + 1
+            if(i > 1)
+            {
+                windsmvar == winterwindsmday[prevwinterwinds]
+                break()
+            }
+        }
+    }
+}
+sprintf("There are %d days during the winter with low wind speed", winterwindsmindex)
 
 #Analysis 4-3: When will there be a lack of gust?
 
+gustspdmean <- mean(gustspd, na.rm = TRUE)
+sprintf("The average gust speed is %f", gustspdmean)
+gustspdmeanr <- 40
+
+gustspdday <- vector()
+gustspdindex <- 1
+for(i in 1:366)
+{
+    if (gustspdframe[i,2] < 40) {
+        gustspdday[gustspdindex] <- i
+    gustspdindex <- gustspdindex + 1
+    }
+}
+sprintf("There are %d days with below average gust speed", gustspdindex)
+
+winterwindsmgustspdday <- vector()
+winterwindsmgustspdindex <- 1
+for(winterwindsmvar in winterwindsmday)
+{
+    for(gustspdvar in gustspdday)
+    {
+        if(winterwindsmvar == gustspdvar)
+        {
+            winterwindsmgustspdday[winterwindsmgustspdindex] <- gustspdvar
+            winterwindsmgustspdindex <- winterwindsmgustspdindex + 1
+        }
+    }
+}
+sprintf("Below are the days suitable for skiing:")
+print(winterwindsmgustspdday)
+
 #Question 5: When will a storm occur?
-#Analysis 5-1: When will the air pressure drops?
+print("------------------------")
+print("When will a storm occur?")
+print("------------------------")
+
+#Analysis 5-1: When will the air pressure drop?
+
+pressuremedmean <- mean(pressuremed, na.rm = TRUE)
+sprintf("The average air pressure is is %f", pressuremedmean)
+pressuremedmeanr <- 1018
+
+pressuremedday <- vector()
+pressuremedindex <- 1
+for(i in 1:366)
+{
+    if (pressuremedframe[i,2] < 1018) {
+        pressuremedday[pressuremedindex] <- i
+    pressuremedindex <- pressuremedindex + 1
+    }
+}
+sprintf("There are %d days with below average air pressure", pressuremedindex)
 
 #Analysis 5-2: When will there be heavy rain?
 
+rainyday <- vector()
+rainydayindex <- 1
+for(i in 1:366)
+{
+    if (rainfallframe[i,2] > 20) {
+        rainyday[rainydayindex] <- i
+        rainydayindex <- rainydayindex + 1
+    }
+}
+sprintf("There are %d days that with heavy rainfall", rainydayindex)
+
+pressuremedrainday <- vector()
+pressuremedrainindex <- 1
+for(pressuremedvar in pressuremedday)
+{
+    for(rainthreevar in rainyday)
+    {
+        if(pressuremedvar == rainthreevar)
+        {
+            pressuremedrainday[pressuremedrainindex] <- rainthreevar
+            prevpressuremedrain <- pressuremedrainindex
+            pressuremedrainindex <- pressuremedrainindex + 1
+            if(i > 1)
+            {
+                rainthreevar == pressuremedrainday[prevpressuremedrain]
+                break()
+            }
+        }
+    }
+}
+sprintf("There are %d days with low pressure and heavy rainfall", pressuremedrainindex)
+
+
 #Analysis 5-3: When will there be strong gusts of wind?
 
+gustspdmean <- mean(gustspd, na.rm = TRUE)
+sprintf("The average gust speed is %f", gustspdmean)
+gustspdmeanr <- 40
+
+gustspdday <- vector()
+gustspdindex <- 1
+for(i in 1:366)
+{
+    if (gustspdframe[i,2] > 40) {
+        gustspdday[gustspdindex] <- i
+    gustspdindex <- gustspdindex + 1
+    }
+}
+sprintf("There are %d days with above average gust speed", gustspdindex)
+
+pressuremedgustspdday <- vector()
+pressuremedgustspdindex <- 1
+for(pressuremedrainvar in pressuremedrainday)
+{
+    for(gustspdvartwo in gustspdday)
+    {
+        if(pressuremedrainvar == gustspdvartwo)
+        {
+            pressuremedgustspdday[pressuremedgustspdindex] <- gustspdvartwo
+            pressuremedgustspdindex <- pressuremedgustspdindex + 1
+        }
+    }
+}
+sprintf("Below are the days where storms occur:")
+print(pressuremedgustspdday)
 
 
 
 
 
-
-
-
-
-
+#Graphs
 ggplot(data = evaporationframe, mapping = aes(x = Days, y = Evaporation)) + geom_line(colour = "red")
 ggplot(data = rainfallframe, mapping = aes(x = Days, y = Rainfall)) + geom_line(colour = "blue")
 ggplot(data = sunframe, mapping = aes(x = Days, y = Sunshine)) + geom_line(colour = "#000000")
