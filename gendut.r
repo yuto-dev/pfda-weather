@@ -57,11 +57,13 @@ cloudmedframe <- data.frame(Days = num, CloudMedian = cloudmedian)
 #Question 1
 #When is the best time to dry your clothes?
 print("------------------------------------------")
-print("When is the best time to dry your clothes?")
+print("When is the best time to hang clothes?")
 print("------------------------------------------")
+
 #Analysis 1-1: Which days have zero rainfall?
-#Goes through the rain database and gets a
-#vector of days that with zero rainfall
+
+#Goes through the rainfall data frame and gets a
+#vector of days with zero rainfall
 rainyday <- vector()
 rainydayindex <- 1
 for(i in 1:366)
@@ -71,16 +73,16 @@ for(i in 1:366)
         rainydayindex <- rainydayindex + 1
     }
 }
-sprintf("There are %d days that with zero rainfall", rainydayindex)
+sprintf("There are %d days with zero rainfall", rainydayindex)
 
 #Analysis 1-2: Which days have above average evaporation rate?
-#The average evaporation rate throughout the year is 4.5, to simplify
-#things, we have rounded it down to 4.
-evamean <- mean(evaporation)
-sprintf("The average evaporation rate is %f", evamean)
-evameanr <- 4
 
-#Goes through the evaporation database and gets a
+#The average evaporation rate throughout the year is 4.5, to simplify
+#things, we have rounded it up to 5.
+evamean <- mean(evaporation)
+evameanr <- as.integer(round(evamean)) #5
+
+#Goes through the evaporation data frame and gets a
 #vector of days that have above average evaporation.
 evaday <- vector()
 evadayindex <- 1
@@ -93,8 +95,30 @@ for(i in 1:366)
 }
 sprintf("There are %d days with above average evaporation rate (%d)", evadayindex, evameanr)
 
+#Analysis 1-3: Which days have above average sunshine?
+
+#The average sunshine throughout the year is 7.8, to simplify
+#things, we have rounded it up to 8.
+sunmean <- mean(sunshine, na.rm = TRUE)
+sunmeanr <- as.integer(round(sunmean)) #8
+
+#Goes through the sunshine data frame and gets a
+#vector of days that have above average sunshine.
+sunday <- vector()
+sundayindex <- 1
+for(i in 1:366)
+{
+    if (sunframe[i,2] > sunmeanr) {
+        sunday[sundayindex] <- i
+        sundayindex <- sundayindex + 1
+    }
+}
+sprintf("There are %d days with above average sunshine (%d)", sundayindex, sunmeanr)
+
+#Results 1
+
 #Goes through both the rainy day and evaporation day vector
-#to find days where they both rain and have above average evaporation.
+#to find days that exist in both vectors.
 rainevaday <- vector()
 rainevaindex <- 1
 for(rainvar in rainyday)
@@ -114,27 +138,9 @@ for(rainvar in rainyday)
         }
     }
 }
-#Analysis 1-3: Which days have above average sunshine?
-#The average sunshine throughout the year is 7.8, to simplify
-#things, we have rounded it up to 8.
-sunmean <- mean(sunshine, na.rm=TRUE)
-sprintf("The average sunshine is %f", sunmean)
-sunmeanr <- 8
-#Goes through the sunshine database and gets a
-#vector of days that have above average sunshine.
-sunday <- vector()
-sundayindex <- 1
-for(i in 1:366)
-{
-    if (sunframe[i,2] > sunmeanr) {
-        sunday[sundayindex] <- i
-        sundayindex <- sundayindex + 1
-    }
-}
-sprintf("There are %d days with above average sunshine (%d)", sundayindex, sunmeanr)
 
 #Goes through both the rainy and evaporation day vector and the sunshine vector
-#to find days where they rain and have above average evaporation and sunshine.
+#to find days that exist in both vectors.
 rainevasunday <- vector()
 rainevasunindex <- 1
 for(rainevavar in rainevaday)
@@ -148,7 +154,7 @@ for(rainevavar in rainevaday)
         }
     }
 }
-sprintf("Below are the days with zero rainfall, high evaporation rate, and high sunshine:")
+sprintf("Below are the days suitable for hanging clothes:")
 print(rainevasunday)
 
 #Question 2: When is the best time to exercise in the evening?
@@ -157,8 +163,9 @@ print("When is the best time to exercise in the evening?")
 print("-------------------------------------------------")
 
 #Analysis 2-1: Which days do not rain?
-#Goes through the rain database and gets a
-#vector of days that do not rain
+
+#Goes through the rainfall data frame and gets a
+#vector of days that do not rain.
 rainyday <- vector()
 rainydayindex <- 1
 for(i in 1:366)
@@ -171,25 +178,14 @@ for(i in 1:366)
 sprintf("There are %d days that do not rain", rainydayindex)
 
 #Analysis 2-2: Which days do not have high humidty in the evening?
-lowhume <- humidityeframe[1,2]
-for(i in 1:366)
-{
-    if(humidityeframe[i,2] < lowhume){
-        lowhume <- humidityeframe[i,2]
-    }
-}
-sprintf("The lowest humidity in the evening is %f", lowhume)
-highhume <- humidityeframe[1,2]
-for(i in 1:366)
-{
-    if(humidityeframe[i,2] > highhume){
-        highhume <- humidityeframe[i,2]
-    }
-}
-sprintf("The highest humidity in the evening is %f", highhume)
-humemean <- mean(humiditye, na.rm = TRUE)
-sprintf("The average humidity in the evening is %f", humemean)
 
+#The average humidity in the evening throughout the year is 44.5, to simplify
+#things, we have rounded it up to 45.
+humemean <- mean(humiditye, na.rm = TRUE)
+humemeanr <- as.integer(round(humemean)) #45
+
+#Goes through the evening humidity data frame and gets a
+#vector of days with comfortable humidity levels.
 humeday <- vector()
 humedayindex <- 1
 for(i in 1:366)
@@ -201,8 +197,30 @@ for(i in 1:366)
 }
 sprintf("There are %d days with comfortable humidity levels", humedayindex)
 
-#Goes through both the rainy day and evaporation day vector
-#to find days where they both rain and have above average evaporation.
+#Analysis 2-3: Which days have non-windy evenings?
+
+#The average wind speed in the evening throughout the year is 17.9, to simplify
+#things, we have rounded it up to 18.
+windsemean <- mean(windspde, na.rm = TRUE)
+windsemeanr <- as.integer(round(windsemean)) #18
+
+#Goes through the rainfall data frame and gets a
+#vector of days with non-windy wind speed in the evenings.
+windseday <- vector()
+windseindex <- 1
+for(i in 1:366)
+{
+    if (windspdeframe[i,2] < 20) {
+        windseday[windseindex] <- i
+    windseindex <- windseindex + 1
+    }
+}
+sprintf("There are %d days with non-windy evenings", windseindex)
+
+#Results 2
+
+#Goes through both the rainy day and humidity evening day vector
+#to find days that belong in both vectors.
 rainhumeday <- vector()
 rainhumeindex <- 1
 for(rainvar in rainyday)
@@ -223,37 +241,8 @@ for(rainvar in rainyday)
     }
 }
 
-#Analysis 2-3: Which days have non-windy evenings?
-lowwindse <- windspdeframe[1,2]
-for(i in 1:366)
-{
-    if(windspdeframe[i,2] < lowwindse){
-        lowwindse <- windspdeframe[i,2]
-    }
-}
-sprintf("The lowest wind speed in the evening is %f", lowwindse)
-highwindse <- windspdeframe[1,2]
-for(i in 1:366)
-{
-    if(windspdeframe[i,2] > highwindse){
-        highwindse <- windspdeframe[i,2]
-    }
-}
-sprintf("The highest wind speed in the evening is %f", highwindse)
-windsemean <- mean(windspde, na.rm = TRUE)
-sprintf("The average wind speed in the evening is %f", windsemean)
-
-windseday <- vector()
-windseindex <- 1
-for(i in 1:366)
-{
-    if (windspdeframe[i,2] < 20) {
-        windseday[windseindex] <- i
-    windseindex <- windseindex + 1
-    }
-}
-sprintf("There are %d days with non-windy evenings", windseindex)
-
+#Goes through both the rainy day and humidity evening day vector and the wind speed evening vector
+#to find days that belong in both vectors.
 rainhumewindseday <- vector()
 rainhumewindseindex <- 1
 for(rainhumevar in rainhumeday)
@@ -267,16 +256,19 @@ for(rainhumevar in rainhumeday)
         }
     }
 }
-sprintf("Below are the days with no rain, comfortable levels of humidity in the evening, and non-windy evenings:")
+sprintf("Below are the days that are suitable for exercising in the evening:")
 print(rainhumewindseday)
 
 #Question 3: When is the best time to fly from the east to the west?
 print("-------------------------------------------------------")
 print("When is the best time to fly from the east to the west?")
 print("-------------------------------------------------------")
+
 #Analysis 3-1: Which days have winds travelling to the west?
 
-
+#Goes through the morning wind direction data frame
+#and convert the direction format from letter-based compass
+#standard to numbers for easier processing.
 winddirm[is.na(winddirm)] <- 0
 for(i in 1:366)
 {
@@ -317,6 +309,8 @@ for(i in 1:366)
 winddirm <- strtoi(winddirm)
 winddirmframe <- data.frame(Days = num, WindDirMorning = winddirm)
 
+#Goes through the converted morning wind direction data frame and gets a
+#vector of days where the wind blows to the west.
 winddirmday <- vector()
 winddirmdayindex <- 1
 for(i in 1:366)
@@ -329,25 +323,44 @@ for(i in 1:366)
 sprintf("There are %d days where the winds travel to the west in the morning", winddirmdayindex)
 
 #Analysis 3-2: Which days do not have cloudy mornings?
-cloudmmean <- mean(cloudm, na.rm = TRUE)
-sprintf("The average cloudiness in the morning is %f", cloudmmean)
-cloudmmeanr <- 4
 
-#Goes through the evaporation database and gets a
-#vector of days that have above average evaporation.
+#The average cloudiness in the morning throughout the year is 3.8, to simplify
+#things, we have rounded it up to 4.
+cloudmmean <- mean(cloudm, na.rm = TRUE)
+cloudmmeanr <- as.integer(round(cloudmmean)) #4
+
+#Goes through the morning cloudiness data frame and gets a
+#vector of days that have below average cloudiness in the morning.
 cloudmday <- vector()
 cloudmdayindex <- 1
 for(i in 1:366)
 {
-    if (cloudmframe[i,2] > cloudmmeanr) {
+    if (cloudmframe[i,2] < cloudmmeanr) {
         cloudmday[cloudmdayindex] <- i
         cloudmdayindex <- cloudmdayindex + 1
     }
 }
 sprintf("There are %d days with below average cloudiness (%d)", cloudmdayindex, cloudmmeanr)
 
-#Goes through both the rainy day and evaporation day vector
-#to find days where they both rain and have above average evaporation.
+#Analysis 3-3: Which days do not rain heavily?
+
+#Goes through the rainfall data frame and gets a
+#vector of days with low rainfall.
+rainyday <- vector()
+rainydayindex <- 1
+for(i in 1:366)
+{
+    if (rainfallframe[i,2] < 10) {
+        rainyday[rainydayindex] <- i
+        rainydayindex <- rainydayindex + 1
+    }
+}
+sprintf("There are %d days with less than 10 rainfall", rainydayindex)
+
+#Results 3
+
+#Goes through both the morning wind direction vector and morning cloudiness day vector
+#to find days where that belong in both vectors.
 winddirmcloudmday <- vector()
 winddirmcloudmindex <- 1
 for(winddirmvar in winddirmday)
@@ -367,21 +380,9 @@ for(winddirmvar in winddirmday)
         }
     }
 }
-sprintf("There are %d days with both west-bound winds and low amount of cloud in the morning", winddirmcloudmindex)
 
-#Analysis 3-3: Which days do not rain heavily?
-
-rainyday <- vector()
-rainydayindex <- 1
-for(i in 1:366)
-{
-    if (rainfallframe[i,2] < 10) {
-        rainyday[rainydayindex] <- i
-        rainydayindex <- rainydayindex + 1
-    }
-}
-sprintf("There are %d days with less than 10 rainfall", rainydayindex)
-
+#Goes through both the morning wind direction and morning cloudiness day vector
+#and the rainy day vector to find days that belong in both vectors.
 winddirmcloudmrainday <- vector()
 winddirmcloudmrainindex <- 1
 for(winddirmcloudmvar in winddirmcloudmday)
@@ -395,7 +396,7 @@ for(winddirmcloudmvar in winddirmcloudmday)
         }
     }
 }
-sprintf("Below are the days suitable for journeys to the west:")
+sprintf("Below are the days suitable for flights to the west:")
 print(winddirmcloudmrainday)
 
 #Question 4: When is the best time to ski?
@@ -404,14 +405,22 @@ print("When is the best time to ski?")
 print("-----------------------------")
 
 #Analysis 4-1: When is winter?
+
+#A season lasts for around 3 months, from an analysis of
+#the temperature median graph, it has been approximated that
+#winter occurs from around the 124th day and ends at around the 214th day.
 ggplot(data = tempmedframe, mapping = aes(x = Days, y = Temperature_Median)) + geom_line(colour = "red")
 winterday <- 124:214
 
 #Analysis 4-2: When will the constant wind speed be low?
-windspdmmean <- mean(windspdm, na.rm = TRUE)
-sprintf("The average wind speed in the morning is %f", windspdmmean)
-windspdmmeanr <- as.integer(windspdmmean)
 
+#The average morning wind speed in the morning throughout the year is 9.4, to simplify
+#things, we have rounded it down to 9.
+windspdmmean <- mean(windspdm, na.rm = TRUE)
+windspdmmeanr <- as.integer(round(windspdmmean))
+
+#Goes through the morning wind speed data frame and gets a
+#vector of days with low wind speed.
 windsmday <- vector()
 windsmindex <- 1
 for(i in 1:366)
@@ -423,6 +432,30 @@ for(i in 1:366)
 }
 sprintf("There are %d days with non-windy evenings", windsmindex)
 
+#Analysis 4-3: When will there be a lack of gust?
+
+#The average gust speed throughout the year is 39.6, to simplify
+#things, we have rounded it up to 40.
+gustspdmean <- mean(gustspd, na.rm = TRUE)
+gustspdmeanr <- as.integer(round(gustspdmean))
+
+#Goes through the gust speed data frame and gets a
+#vector of days with low gust speed.
+gustspdday <- vector()
+gustspdindex <- 1
+for(i in 1:366)
+{
+    if (gustspdframe[i,2] < 40) {
+        gustspdday[gustspdindex] <- i
+    gustspdindex <- gustspdindex + 1
+    }
+}
+sprintf("There are %d days with below average gust speed", gustspdindex)
+
+#Results 4
+
+#Goes through both the morning winter vector and morning wind speed vector
+#to find days that belong in both vectors.
 winterwindsmday <- vector()
 winterwindsmindex <- 1
 for(wintervar in winterday)
@@ -442,25 +475,9 @@ for(wintervar in winterday)
         }
     }
 }
-sprintf("There are %d days during the winter with low wind speed", winterwindsmindex)
 
-#Analysis 4-3: When will there be a lack of gust?
-
-gustspdmean <- mean(gustspd, na.rm = TRUE)
-sprintf("The average gust speed is %f", gustspdmean)
-gustspdmeanr <- 40
-
-gustspdday <- vector()
-gustspdindex <- 1
-for(i in 1:366)
-{
-    if (gustspdframe[i,2] < 40) {
-        gustspdday[gustspdindex] <- i
-    gustspdindex <- gustspdindex + 1
-    }
-}
-sprintf("There are %d days with below average gust speed", gustspdindex)
-
+#Goes through both the morning winter and morning wind speed vector and the gust speed vector
+#to find days that belong in both vectors.
 winterwindsmgustspdday <- vector()
 winterwindsmgustspdindex <- 1
 for(winterwindsmvar in winterwindsmday)
@@ -484,10 +501,13 @@ print("------------------------")
 
 #Analysis 5-1: When will the air pressure drop?
 
+#The average air pressure throughout the year is 1018.2, to simplify
+#things, we have rounded it down to 1018.
 pressuremedmean <- mean(pressuremed, na.rm = TRUE)
-sprintf("The average air pressure is is %f", pressuremedmean)
-pressuremedmeanr <- 1018
+pressuremedmeanr <- as.integer(round(pressuremedmean))
 
+#Goes through the median pressure data frame and gets a
+#vector of days with low median pressure.
 pressuremedday <- vector()
 pressuremedindex <- 1
 for(i in 1:366)
@@ -501,6 +521,8 @@ sprintf("There are %d days with below average air pressure", pressuremedindex)
 
 #Analysis 5-2: When will there be heavy rain?
 
+#Goes through the rainfall data frame and gets a
+#vector of days with high rainfall.
 rainyday <- vector()
 rainydayindex <- 1
 for(i in 1:366)
@@ -510,8 +532,32 @@ for(i in 1:366)
         rainydayindex <- rainydayindex + 1
     }
 }
-sprintf("There are %d days that with heavy rainfall", rainydayindex)
+sprintf("There are %d days with heavy rainfall", rainydayindex)
 
+#Analysis 5-3: When will there be strong gusts of wind?
+
+#The average gust speed throughout the year is 39.6, to simplify
+#things, we have rounded it up to 40.
+gustspdmean <- mean(gustspd, na.rm = TRUE)
+gustspdmeanr <- as.integer(round(gustspdmean)) #40
+
+#Goes through the gust speed data frame and gets a
+#vector of days with high gust speed.
+gustspdday <- vector()
+gustspdindex <- 1
+for(i in 1:366)
+{
+    if (gustspdframe[i,2] > gustspdmeanr) {
+        gustspdday[gustspdindex] <- i
+    gustspdindex <- gustspdindex + 1
+    }
+}
+sprintf("There are %d days with above average gust speed", gustspdindex)
+
+#Results 5
+
+#Goes through both the pressure median vector and rain vector
+#to find days that belong in both vectors.
 pressuremedrainday <- vector()
 pressuremedrainindex <- 1
 for(pressuremedvar in pressuremedday)
@@ -531,26 +577,9 @@ for(pressuremedvar in pressuremedday)
         }
     }
 }
-sprintf("There are %d days with low pressure and heavy rainfall", pressuremedrainindex)
 
-
-#Analysis 5-3: When will there be strong gusts of wind?
-
-gustspdmean <- mean(gustspd, na.rm = TRUE)
-sprintf("The average gust speed is %f", gustspdmean)
-gustspdmeanr <- 40
-
-gustspdday <- vector()
-gustspdindex <- 1
-for(i in 1:366)
-{
-    if (gustspdframe[i,2] > 40) {
-        gustspdday[gustspdindex] <- i
-    gustspdindex <- gustspdindex + 1
-    }
-}
-sprintf("There are %d days with above average gust speed", gustspdindex)
-
+#Goes through both the pressure median and rain vector and the gust speed vector
+#to find days that belong in both vectors.
 pressuremedgustspdday <- vector()
 pressuremedgustspdindex <- 1
 for(pressuremedrainvar in pressuremedrainday)
