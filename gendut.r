@@ -177,7 +177,7 @@ for(i in 1:366)
 }
 sprintf("There are %d days that do not rain", rainydayindex)
 
-#Analysis 2-2: Which days do not have high humidty in the evening?
+#Analysis 2-2: Which days have low humidity in the evening?
 
 #The average humidity in the evening throughout the year is 44.5, to simplify
 #things, we have rounded it up to 45.
@@ -219,8 +219,8 @@ sprintf("There are %d days with non-windy evenings", windseindex)
 
 #Results 2
 
-#Goes through both the rainy day and humidity evening day vector
-#to find days that belong in both vectors.
+#Goes through both the rainfall and evening humidity vector
+#to find days that exist in both vectors.
 rainhumeday <- vector()
 rainhumeindex <- 1
 for(rainvar in rainyday)
@@ -241,8 +241,8 @@ for(rainvar in rainyday)
     }
 }
 
-#Goes through both the rainy day and humidity evening day vector and the wind speed evening vector
-#to find days that belong in both vectors.
+#Goes through both the rainfall and evening humidity vector and the evening wind speed vector
+#to find days that exist in both vectors.
 rainhumewindseday <- vector()
 rainhumewindseindex <- 1
 for(rainhumevar in rainhumeday)
@@ -359,8 +359,8 @@ sprintf("There are %d days with less than 10 rainfall", rainydayindex)
 
 #Results 3
 
-#Goes through both the morning wind direction vector and morning cloudiness day vector
-#to find days where that belong in both vectors.
+#Goes through both the morning wind direction vector and morning cloudiness vector
+#to find days that exist in both vectors.
 winddirmcloudmday <- vector()
 winddirmcloudmindex <- 1
 for(winddirmvar in winddirmday)
@@ -381,8 +381,8 @@ for(winddirmvar in winddirmday)
     }
 }
 
-#Goes through both the morning wind direction and morning cloudiness day vector
-#and the rainy day vector to find days that belong in both vectors.
+#Goes through both the morning wind direction and morning cloudiness vector
+#and the rainfall vector to find days that exist in both vectors.
 winddirmcloudmrainday <- vector()
 winddirmcloudmrainindex <- 1
 for(winddirmcloudmvar in winddirmcloudmday)
@@ -411,21 +411,22 @@ print("-----------------------------")
 #winter occurs from around the 124th day and ends at around the 214th day.
 ggplot(data = tempmedframe, mapping = aes(x = Days, y = Temperature_Median)) + geom_line(colour = "red")
 winterday <- 124:214
+print("There are 90 days during winter")
 
 #Analysis 4-2: When will the constant wind speed be low?
 
-#The average morning wind speed in the morning throughout the year is 9.4, to simplify
+#The average morning wind speed throughout the year is 9.4, to simplify
 #things, we have rounded it down to 9.
 windspdmmean <- mean(windspdm, na.rm = TRUE)
 windspdmmeanr <- as.integer(round(windspdmmean))
 
 #Goes through the morning wind speed data frame and gets a
-#vector of days with low wind speed.
+#vector of days with low morning wind speed.
 windsmday <- vector()
 windsmindex <- 1
 for(i in 1:366)
 {
-    if (windspdmframe[i,2] < 9) {
+    if (windspdmframe[i,2] < windspdmmeanr) {
         windsmday[windsmindex] <- i
     windsmindex <- windsmindex + 1
     }
@@ -437,7 +438,7 @@ sprintf("There are %d days with non-windy evenings", windsmindex)
 #The average gust speed throughout the year is 39.6, to simplify
 #things, we have rounded it up to 40.
 gustspdmean <- mean(gustspd, na.rm = TRUE)
-gustspdmeanr <- as.integer(round(gustspdmean))
+gustspdmeanr <- as.integer(round(gustspdmean)) #40
 
 #Goes through the gust speed data frame and gets a
 #vector of days with low gust speed.
@@ -445,7 +446,7 @@ gustspdday <- vector()
 gustspdindex <- 1
 for(i in 1:366)
 {
-    if (gustspdframe[i,2] < 40) {
+    if (gustspdframe[i,2] < gustspdmeanr) {
         gustspdday[gustspdindex] <- i
     gustspdindex <- gustspdindex + 1
     }
@@ -455,7 +456,7 @@ sprintf("There are %d days with below average gust speed", gustspdindex)
 #Results 4
 
 #Goes through both the morning winter vector and morning wind speed vector
-#to find days that belong in both vectors.
+#to find days that exist in both vectors.
 winterwindsmday <- vector()
 winterwindsmindex <- 1
 for(wintervar in winterday)
@@ -476,8 +477,8 @@ for(wintervar in winterday)
     }
 }
 
-#Goes through both the morning winter and morning wind speed vector and the gust speed vector
-#to find days that belong in both vectors.
+#Goes through both the winter and morning wind speed vector and the gust speed vector
+#to find days that exist in both vectors.
 winterwindsmgustspdday <- vector()
 winterwindsmgustspdindex <- 1
 for(winterwindsmvar in winterwindsmday)
@@ -504,7 +505,7 @@ print("------------------------")
 #The average air pressure throughout the year is 1018.2, to simplify
 #things, we have rounded it down to 1018.
 pressuremedmean <- mean(pressuremed, na.rm = TRUE)
-pressuremedmeanr <- as.integer(round(pressuremedmean))
+pressuremedmeanr <- as.integer(round(pressuremedmean)) #1018
 
 #Goes through the median pressure data frame and gets a
 #vector of days with low median pressure.
@@ -512,7 +513,7 @@ pressuremedday <- vector()
 pressuremedindex <- 1
 for(i in 1:366)
 {
-    if (pressuremedframe[i,2] < 1018) {
+    if (pressuremedframe[i,2] < pressuremedmeanr) {
         pressuremedday[pressuremedindex] <- i
     pressuremedindex <- pressuremedindex + 1
     }
@@ -532,7 +533,7 @@ for(i in 1:366)
         rainydayindex <- rainydayindex + 1
     }
 }
-sprintf("There are %d days with heavy rainfall", rainydayindex)
+sprintf("There are %d days with high rainfall", rainydayindex)
 
 #Analysis 5-3: When will there be strong gusts of wind?
 
@@ -556,8 +557,8 @@ sprintf("There are %d days with above average gust speed", gustspdindex)
 
 #Results 5
 
-#Goes through both the pressure median vector and rain vector
-#to find days that belong in both vectors.
+#Goes through both the pressure median vector and rainfall vector
+#to find days that exist in both vectors.
 pressuremedrainday <- vector()
 pressuremedrainindex <- 1
 for(pressuremedvar in pressuremedday)
@@ -578,8 +579,8 @@ for(pressuremedvar in pressuremedday)
     }
 }
 
-#Goes through both the pressure median and rain vector and the gust speed vector
-#to find days that belong in both vectors.
+#Goes through both the pressure median and rainfall vector and the gust speed vector
+#to find days that exist in both vectors.
 pressuremedgustspdday <- vector()
 pressuremedgustspdindex <- 1
 for(pressuremedrainvar in pressuremedrainday)
@@ -595,10 +596,6 @@ for(pressuremedrainvar in pressuremedrainday)
 }
 sprintf("Below are the days where storms occur:")
 print(pressuremedgustspdday)
-
-
-
-
 
 #Graphs
 ggplot(data = evaporationframe, mapping = aes(x = Days, y = Evaporation)) + geom_line(colour = "red")
