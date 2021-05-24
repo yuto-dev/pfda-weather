@@ -117,7 +117,7 @@ sprintf("There are %d days with above average sunshine (%d)", sundayindex, sunme
 
 #Results 1
 
-#Goes through both the rainy day and evaporation day vector
+#Goes through both the rainfall and evaporation vector
 #to find days that exist in both vectors.
 rainevaday <- vector()
 rainevaindex <- 1
@@ -139,7 +139,7 @@ for(rainvar in rainyday)
     }
 }
 
-#Goes through both the rainy and evaporation day vector and the sunshine vector
+#Goes through both the rainfall and evaporation vector and the sunshine vector
 #to find days that exist in both vectors.
 rainevasunday <- vector()
 rainevasunindex <- 1
