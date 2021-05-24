@@ -2,8 +2,10 @@
 #TP058652
 library(ggplot2)
 
+#Reads the weather.csv file.
 weatherdata <- read.csv("weather.csv")
 
+#Assigns weather data to vectors.
 num <- 1:366
 mintemp <- weatherdata[,1]
 maxtemp <- weatherdata[,2]
@@ -21,10 +23,12 @@ pressuree <- weatherdata[,15]
 cloudm <- weatherdata[,16]
 cloude <- weatherdata[,17]
 
+#Removes NA data.
 sunshine[is.na(sunshine)] <- 0
 windspdm[is.na(windspdm)] <- 0
 gustspd[is.na(gustspd)] <- 0
 
+#Creates data frame from vectors.
 tempframe = data.frame(Min = mintemp, Max = maxtemp)
 evaporationframe = data.frame(Days = num, Evaporation = evaporation)
 rainfallframe <- data.frame(Days = num, Rainfall = rainfall)
@@ -40,12 +44,14 @@ pressureframe <- data.frame(Morning = pressurem, Evening = pressuree)
 cloudframe <- data.frame(Morning = cloudm, Evening = cloude)
 cloudmframe <- data.frame(Days = num, CloudMorning = cloudm)
 
+#Create median vectors for data with morning and evening variants.
 tempmedian <- rowMeans(tempframe)
 windspdmedian <- rowMeans(windspdframe)
 humiditymedian <- rowMeans(humidityframe)
 pressuremed <- rowMeans(pressureframe)
 cloudmedian <- rowMeans(cloudframe)
 
+#Create median data frames.
 tempmedframe <- data.frame(Days = num, Temperature_Median = tempmedian)
 windspdmedframe <- data.frame(Days = num, WindSpeedMedian = windspdmedian)
 humiditymedframe <- data.frame(Days = num, HumidityMedian = humiditymedian)
@@ -55,7 +61,7 @@ cloudmedframe <- data.frame(Days = num, CloudMedian = cloudmedian)
 
 
 #Question 1
-#When is the best time to dry your clothes?
+#When is the best time to hang your clothes?
 print("------------------------------------------")
 print("When is the best time to hang clothes?")
 print("------------------------------------------")
@@ -63,7 +69,7 @@ print("------------------------------------------")
 #Analysis 1-1: Which days have zero rainfall?
 
 #Goes through the rainfall data frame and gets a
-#vector of days with zero rainfall
+#vector of days with zero rainfall.
 rainyday <- vector()
 rainydayindex <- 1
 for(i in 1:366)
@@ -83,7 +89,7 @@ evamean <- mean(evaporation)
 evameanr <- as.integer(round(evamean)) #5
 
 #Goes through the evaporation data frame and gets a
-#vector of days that have above average evaporation.
+#vector of days with above average evaporation.
 evaday <- vector()
 evadayindex <- 1
 for(i in 1:366)
@@ -204,8 +210,8 @@ sprintf("There are %d days with comfortable humidity levels", humedayindex)
 windsemean <- mean(windspde, na.rm = TRUE)
 windsemeanr <- as.integer(round(windsemean)) #18
 
-#Goes through the rainfall data frame and gets a
-#vector of days with non-windy wind speed in the evenings.
+#Goes through the evening wind speed data frame and gets a
+#vector of days with non-windy evenings.
 windseday <- vector()
 windseindex <- 1
 for(i in 1:366)
@@ -413,7 +419,7 @@ ggplot(data = tempmedframe, mapping = aes(x = Days, y = Temperature_Median)) + g
 winterday <- 124:214
 print("There are 90 days during winter")
 
-#Analysis 4-2: When will the constant wind speed be low?
+#Analysis 4-2: When will the constant wind speed be low in the morning?
 
 #The average morning wind speed throughout the year is 9.4, to simplify
 #things, we have rounded it down to 9.
@@ -431,7 +437,7 @@ for(i in 1:366)
     windsmindex <- windsmindex + 1
     }
 }
-sprintf("There are %d days with non-windy evenings", windsmindex)
+sprintf("There are %d days with non-windy mornings", windsmindex)
 
 #Analysis 4-3: When will there be a lack of gust?
 
@@ -455,7 +461,7 @@ sprintf("There are %d days with below average gust speed", gustspdindex)
 
 #Results 4
 
-#Goes through both the morning winter vector and morning wind speed vector
+#Goes through both the winter vector and morning wind speed vector
 #to find days that exist in both vectors.
 winterwindsmday <- vector()
 winterwindsmindex <- 1
