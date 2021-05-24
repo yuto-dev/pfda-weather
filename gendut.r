@@ -136,11 +136,6 @@ for(rainvar in rainyday)
             rainevaday[rainevaindex] <- evavar
             prevraineva <- rainevaindex
             rainevaindex <- rainevaindex + 1
-            if(i > 1)
-            {
-                evavar == rainevaday[prevraineva]
-                break()
-            }
         }
     }
 }
@@ -183,7 +178,7 @@ for(i in 1:366)
 }
 sprintf("There are %d days that do not rain", rainydayindex)
 
-#Analysis 2-2: Which days have low humidity in the evening?
+#Analysis 2-2: Which days have comfortable levels of humidity in the evening?
 
 #The average humidity in the evening throughout the year is 44.5, to simplify
 #things, we have rounded it up to 45.
@@ -238,11 +233,6 @@ for(rainvar in rainyday)
             rainhumeday[rainhumeindex] <- humevar
             prevrainhume <- rainhumeindex
             rainhumeindex <- rainhumeindex + 1
-            if(i > 1)
-            {
-                humevar == rainhumeday[prevrainhume]
-                break()
-            }
         }
     }
 }
@@ -328,7 +318,7 @@ for(i in 1:366)
 }
 sprintf("There are %d days where the winds travel to the west in the morning", winddirmdayindex)
 
-#Analysis 3-2: Which days do not have cloudy mornings?
+#Analysis 3-2: Which days have non-cloudy mornings?
 
 #The average cloudiness in the morning throughout the year is 3.8, to simplify
 #things, we have rounded it up to 4.
@@ -348,7 +338,7 @@ for(i in 1:366)
 }
 sprintf("There are %d days with below average cloudiness (%d)", cloudmdayindex, cloudmmeanr)
 
-#Analysis 3-3: Which days do not rain heavily?
+#Analysis 3-3: Which days have low rainfall?
 
 #Goes through the rainfall data frame and gets a
 #vector of days with low rainfall.
@@ -378,11 +368,6 @@ for(winddirmvar in winddirmday)
             winddirmcloudmday[winddirmcloudmindex] <- cloudmvar
             prevwinddirmcloudm <- winddirmcloudmindex
             winddirmcloudmindex <- winddirmcloudmindex + 1
-            if(i > 1)
-            {
-                cloudmvar == winddirmcloudmday[prevwinddirmcloudm]
-                break()
-            }
         }
     }
 }
@@ -474,11 +459,6 @@ for(wintervar in winterday)
             winterwindsmday[winterwindsmindex] <- windsmvar
             prevwinterwinds <- winterwindsmindex
             winterwindsmindex <- winterwindsmindex + 1
-            if(i > 1)
-            {
-                windsmvar == winterwindsmday[prevwinterwinds]
-                break()
-            }
         }
     }
 }
@@ -506,7 +486,7 @@ print("------------------------")
 print("When will a storm occur?")
 print("------------------------")
 
-#Analysis 5-1: When will the air pressure drop?
+#Analysis 5-1: Which days have low air pressure?
 
 #The average air pressure throughout the year is 1018.2, to simplify
 #things, we have rounded it down to 1018.
@@ -526,7 +506,7 @@ for(i in 1:366)
 }
 sprintf("There are %d days with below average air pressure", pressuremedindex)
 
-#Analysis 5-2: When will there be heavy rain?
+#Analysis 5-2: Which days have high rainfall?
 
 #Goes through the rainfall data frame and gets a
 #vector of days with high rainfall.
@@ -541,7 +521,7 @@ for(i in 1:366)
 }
 sprintf("There are %d days with high rainfall", rainydayindex)
 
-#Analysis 5-3: When will there be strong gusts of wind?
+#Analysis 5-3: Which days have strong gusts of wind?
 
 #The average gust speed throughout the year is 39.6, to simplify
 #things, we have rounded it up to 40.
@@ -576,11 +556,6 @@ for(pressuremedvar in pressuremedday)
             pressuremedrainday[pressuremedrainindex] <- rainthreevar
             prevpressuremedrain <- pressuremedrainindex
             pressuremedrainindex <- pressuremedrainindex + 1
-            if(i > 1)
-            {
-                rainthreevar == pressuremedrainday[prevpressuremedrain]
-                break()
-            }
         }
     }
 }
