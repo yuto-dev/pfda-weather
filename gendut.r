@@ -255,12 +255,12 @@ for(rainhumevar in rainhumeday)
 sprintf("Below are the days that are suitable for exercising in the evening:")
 print(rainhumewindseday)
 
-#Question 3: When is the best time to fly from the east to the west?
+#Question 3: When is the best time to fly from the west to the east?
 print("-------------------------------------------------------")
-print("When is the best time to fly from the east to the west?")
+print("When is the best time to fly from the west to the east?")
 print("-------------------------------------------------------")
 
-#Analysis 3-1: Which days have winds travelling to the west?
+#Analysis 3-1: Which days have winds travelling to the east?
 
 #Goes through the morning wind direction data frame
 #and convert the direction format from letter-based compass
@@ -306,17 +306,17 @@ winddirm <- strtoi(winddirm)
 winddirmframe <- data.frame(Days = num, WindDirMorning = winddirm)
 
 #Goes through the converted morning wind direction data frame and gets a
-#vector of days where the wind blows to the west.
+#vector of days where the wind blows to the east.
 winddirmday <- vector()
 winddirmdayindex <- 1
 for(i in 1:366)
 {
-    if (winddirmframe[i,2] > 9) {
+    if (winddirmframe[i,2] < 9) {
         winddirmday[winddirmdayindex] <- i
         winddirmdayindex <- winddirmdayindex + 1
     }
 }
-sprintf("There are %d days where the winds travel to the west in the morning", winddirmdayindex)
+sprintf("There are %d days where the winds travel to the east in the morning", winddirmdayindex)
 
 #Analysis 3-2: Which days have non-cloudy mornings?
 
@@ -387,7 +387,7 @@ for(winddirmcloudmvar in winddirmcloudmday)
         }
     }
 }
-sprintf("Below are the days suitable for flights to the west:")
+sprintf("Below are the days suitable for flights to the east:")
 print(winddirmcloudmrainday)
 
 #Question 4: When is the best time to ski?
