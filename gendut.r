@@ -52,7 +52,7 @@ pressuremed <- rowMeans(pressureframe)
 cloudmedian <- rowMeans(cloudframe)
 
 #Create median data frames.
-tempmedframe <- data.frame(Days = num, Temperature_Median = tempmedian)
+tempmedframe <- data.frame(Days = num, Temperature_Median = tempmedian, Min = mintemp, Max = maxtemp)
 windspdmedframe <- data.frame(Days = num, WindSpeedMedian = windspdmedian)
 humiditymedframe <- data.frame(Days = num, HumidityMedian = humiditymedian)
 pressuremedframe <- data.frame(Days = num, PressureMedian = pressuremed)
@@ -578,12 +578,37 @@ for(pressuremedrainvar in pressuremedrainday)
 sprintf("Below are the days where storms occur:")
 print(pressuremedgustspdday)
 
-#Graphs
-ggplot(data = evaporationframe, mapping = aes(x = Days, y = Evaporation)) + geom_line(colour = "red")
+#Extra Features
+#Converts the plotted graphs to a .png file with various customizable properties.
+
+ggplot(data = tempmedframe, mapping = aes(x = Days)) + geom_line(aes(y = Temperature_Median)) +
+                                                        geom_line(aes(y = Min), colour = "blue") +
+                                                        geom_line(aes(y = Max), colour = "red")
+ggsave(filename = "temperature.png", dpi = 300, type = "cairo", height = 4, width = 6, units = "in")
+
 ggplot(data = rainfallframe, mapping = aes(x = Days, y = Rainfall)) + geom_line(colour = "blue")
+ggsave(filename = "rainfall.png", dpi = 300, type = "cairo", height = 4, width = 6, units = "in")
+
+ggplot(data = evaporationframe, mapping = aes(x = Days, y = Evaporation)) + geom_line(colour = "red")
+ggsave(filename = "evaporation.png", dpi = 300, type = "cairo", height = 4, width = 6, units = "in")
+
 ggplot(data = sunframe, mapping = aes(x = Days, y = Sunshine)) + geom_line(colour = "#000000")
+ggsave(filename = "sunshine.png", dpi = 300, type = "cairo", height = 4, width = 6, units = "in")
+
 ggplot(data = gustspdframe, mapping = aes(x = Days, y = WindGustSpeed)) + geom_line(colour = "green")
-ggplot(data = windspdmedframe, mapping = aes(x = Days, y = WindSpeedMedian)) + geom_line(colour = "green")
-ggplot(data = humiditymedframe, mapping = aes(x = Days, y = HumidityMedian)) + geom_line(colour = "blue")
+ggsave(filename = "gustspd.png", dpi = 300, type = "cairo", height = 4, width = 6, units = "in")
+
+ggplot(data = humidityeframe, mapping = aes(x = Days, y = HumidityEvening)) + geom_line(colour = "blue")
+ggsave(filename = "humiditye.png", dpi = 300, type = "cairo", height = 4, width = 6, units = "in")
+
+ggplot(data = windspdeframe, mapping = aes(x = Days, y =WindSpeedEvening)) + geom_line(colour = "green")
+ggsave(filename = "windspde.png", dpi = 300, type = "cairo", height = 4, width = 6, units = "in")
+
+ggplot(data = cloudmframe, mapping = aes(x = Days, y = CloudMorning)) + geom_line(colour = "blue")
+ggsave(filename = "cloudm.png", dpi = 300, type = "cairo", height = 4, width = 6, units = "in")
+
+ggplot(data = windspdmframe, mapping = aes(x = Days, y = WindSpeedMorning)) + geom_line(colour = "green")
+ggsave(filename = "windspdm.png", dpi = 300, type = "cairo", height = 4, width = 6, units = "in")
+
 ggplot(data = pressuremedframe, mapping = aes(x = Days, y = PressureMedian)) + geom_line(colour = "blue")
-ggplot(data = cloudmedframe, mapping = aes(x = Days, y = CloudMedian)) + geom_line(colour = "blue")
+ggsave(filename = "pressure.png", dpi = 300, type = "cairo", height = 4, width = 6, units = "in")
